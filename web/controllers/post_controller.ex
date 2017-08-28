@@ -2,6 +2,11 @@ defmodule BlogApp.PostController do
   use BlogApp.Web, :controller
   alias BlogApp.Post
 
+  def index(conn, _params) do
+    posts = Post |> Repo.all
+    render conn, "index.html", posts: posts
+  end
+
   def new(conn, _params) do
     changeset = Post.changeset(%Post{})
     render conn, "new.html", changeset: changeset
@@ -13,7 +18,7 @@ defmodule BlogApp.PostController do
       {:ok, _} ->
         conn
         |> put_flash(:info, "投稿しました")
-        |> redirect(to: post_path(conn, :new))
+        |> redirect(to: post_path(conn, :index))
       {:error, changeset} ->
         conn
         |> put_flash(:error, "投稿に失敗しました")
